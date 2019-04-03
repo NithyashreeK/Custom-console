@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Console - Version 2</title>
+	<link rel="stylesheet" href="simple-console.css">
+</head>
+<body>
+
+	<script src="simple-console.js"></script>
+	<script>
+		localStorage.clear();
+		var con = new SimpleConsole({
+			placeholder: "",
+			handleCommand: function(command){
+				command = command.split(' ');
+				try {
+					commandSet(command);
+					
+				} catch(error) {
+					con.error(error);
+				}
+			},
+			autofocus: true,
+			storageID: "app-console"
+		});
+		
+		var statusnumber;
+		var beginstatus = 1;
+		var commitstatus = 0;
+
+		function outBlock(){
+			var tempArr = JSON.parse(localStorage['app-console command history']);
+			var cArr = [];
+			for(var i=tempArr.length-1; i>=0; i--){
+				var tempElements = tempArr[i].split(' ');
+				if(tempElements[0] == 'SET'){
+					cArr = {name: tempElements[1], value: tempElements[2]};
+					return cArr;
+				}else if(tempElements[0] == 'UNSET'){
+					cArr = {name: tempElements[1], value: null};
+					return cArr;
+				}
+			}
+		}
+
+		function checkNull(input){
+			if(input['value'] != null){
+				return input['value'];
+			}else{
+				return 'NULL';
+			}
+		}
+
+		function checkCount(input){
+			if(input != 0){
+				return input;	
+			}else{
+				return 'NULL';
+			}
+		}
+
+		function commandSet(input){
+			
+			if(input[0] == 'BEGIN'){
+
+				var newbeginstatus = beginstatus++;
+				localStorage.setItem('status', newbeginstatus);
+				localStorage.setItem('arr'+newbeginstatus, '');
+				statusnumber = newbeginstatus;
+				
+				if(newbeginstatus-1 != 0){
+					var oldstatus = newbeginstatus-1;
+					var myVal = JSON.parse(localStorage.getItem('arr'+oldstatus));
+					var valInBlock = {name: myVal['name'], value: myVal['value']};
+					localStorage.setItem("arr"+statusnumber,JSON.stringify(valInBlock));
+				}else if(newbeginstatus-1 == 0){
+					var valOutBlock = outBlock();
+					if(valOutBlock){
+						localStorage.setItem("arr"+statusnumber,JSON.stringify(valOutBlock));
+					}
+				}
+
+			}else if(input[0] == 'ROLLBACK'){
+				
+				if(commitstatus != 1){
+					localStorage.removeItem('arr'+statusnumber);
+					statusnumber--;
+					beginstatus--;
+					localStorage.setItem('status', statusnumber);
+				}else{
+					con.log('INVALID ROLLBACK');
+				}
+				
+			}else if(input[0] == 'COMMIT'){
+
+				var myVal = JSON.parse(localStorage.getItem('arr'+statusnumber));
+				localStorage.setItem(myVal['name'], myVal['value']);
+				while(statusnumber > 0){
+					localStorage.removeItem('arr'+statusnumber);
+					statusnumber--;
+				}
+				localStorage.removeItem('status');
+				commitstatus = 1;
+				localStorage.setItem('commit', commitstatus);
+
+			}else if(input[0] == 'SET'){
+				
+				if(localStorage.hasOwnProperty('arr'+statusnumber)){
+					var myVal = {name: input[1], value: input[2]};
+					localStorage.setItem("arr"+statusnumber,JSON.stringify(myVal));
+				}else{
+					localStorage.setItem(input[1], input[2]);
+				}
+				
+			}else if(input[0] == 'GET'){
+				
+				if(localStorage.hasOwnProperty('arr'+statusnumber)){
+					var myVal = JSON.parse(localStorage.getItem('arr'+statusnumber));
+					var output = checkNull(myVal);
+					con.log(output);
+				}else{
+					var myVal = JSON.parse(localStorage.getItem(input[1]));
+					if(myVal != null){
+						con.log(myVal);
+					}else{
+						con.log('NULL');
+					}
+				}
+				
+			}else if(input[0] == 'UNSET'){
+
+				if(localStorage.hasOwnProperty('arr'+statusnumber)){
+					var myVal = {name: input[1], value: input[2]};
+					localStorage.setItem("arr"+statusnumber,JSON.stringify(myVal));
+				}else{
+					localStorage.setItem(input[1], null);
+				}
+
+			}else if(input[0] == 'COUNT'){
+
+				var count = 0;
+				var tempstatusNo = statusnumber;
+				var myVal = JSON.parse(localStorage.getItem('arr'+statusnumber));
+				if(myVal['value'] == input[1]){
+					count++;
+				}
+				var cCount = checkCount(count);
+				con.log(cCount);
+				
+			}else if(input[0] == 'END'){
+
+				document.querySelectorAll('.simple-console-input, .simple-console-input-wrapper')[0].style.display = 'none';
+			}
+
+		}
+
+		// add the console to the page
+		document.body.appendChild(con.element);
+
+		// show any uncaught errors
+		con.handleUncaughtErrors();
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Console - Version 1</title>
+	<link rel="stylesheet" href="simple-console.css">
+</head>
+<body>
+
+	<script src="simple-console.js"></script>
+	<script>
+		localStorage.clear();
+		var con = new SimpleConsole({
+			placeholder: "",
+			handleCommand: function(command){
+				command = command.split(' ');
+				try {
+					commandSet(command);
+					
+				} catch(error) {
+					con.error(error);
+				}
+			},
+			autofocus: true,
+			storageID: "app-console"
+		});
+
+		function commandSet(input){
+
+			if(input[0] == 'SET'){
+				localStorage.setItem(input[1], input[2]);
+
+			}else if(input[0] == 'GET'){
+				var myVal = JSON.parse(localStorage.getItem(input[1]));
+				if(myVal != null){
+					con.log(myVal);
+				}else{
+					con.log('NULL');
+				}
+				
+			}else if(input[0] == 'UNSET'){
+				localStorage.setItem(input[1], null);
+
+			}else if(input[0] == 'COUNT'){
+				var count = 0;
+				for(var i=0; i<localStorage.length; i++) {
+				    var key = localStorage.key(i);
+				    var value = localStorage[key];
+				    if(value == input[1]){
+				    	count++;
+				    }
+				}
+				con.log(count);
+
+			}else if(input[0] == 'END'){
+				document.querySelectorAll('.simple-console-input, .simple-console-input-wrapper')[0].style.display = 'none';
+			}
+
+		}
+
+		// add the console to the page
+		document.body.appendChild(con.element);
+
+		// show any uncaught errors
+		con.handleUncaughtErrors();
+	</script>
+</body>
+</html>

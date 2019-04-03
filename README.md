@@ -3,7 +3,6 @@
 Created two versions of a custom command line interface suing JavaScript/jQuery
 
 Version 1 [In-Memory Database] -
-
 SETUP:
 •	Used a web command line interface, link to the library - https://github.com/1j01/simple-console.
 •	Included files simple-console.css and simple-console.js and created an instance of the console, new SimpleConsole(options).

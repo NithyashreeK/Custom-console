@@ -18,7 +18,7 @@ To perform any of the operations, the input was first converted into an array.
 
 Version 2 [In-Memory database with Transactions] -\
 COMMANDS:\
--BEGIN: 
+BEGIN: 
  - The function checks the number of BEGINS in localStorage indicating the number of transactional blocks. 
  - This is tracked by beginstatus and statusnumber. Beginstatus is incremented every time a BEGIN is entered, updating the statusnumber which is used throughout the code.
  - An array key, in the format arr followed by statusnumber (ex. arr1) is created in localStorage every time a BEGIN is entered. Any transaction following this BEGIN will have their corresponding values stored in the array.
@@ -26,24 +26,24 @@ COMMANDS:\
  -	Every time BEGIN is entered, the function checks to see if there are any previous blocks. If so, values from the most recent previous block are copied to the current block.
  -	If it is the first BEGIN, localStorage is checked for values (performed by outBlock function). Any value outside the block indicates committed values and these are copied over to the first BEGIN block.
  
--ROLLBACK:
+ROLLBACK:
  -	If this command is entered, the most recent transactional block/array is removed from localStorage. This is done by tracking the last statusnumber, decrementing statusnumber and beginstatus by one and updating status in localStorage.
  -	If the values are committed or permanently stored in localStorage (i.e, outside transactional blocks) and this is indicated by the key commit which will be set to 1 in such cases, then it would result in an INVALID ROLLBACK.
 
--COMMIT:
+COMMIT:
  -	COMMIT takes the most recent block, i.e, recent array’s values and commits it to a new key-value pair in localStorage outside of these arrays. All arrays (transactional blocks) are deleted including status key and a new key called commit is added to localStorage which is set to 1.
 
--SET:
+SET:
  -	If this command is inside a BEGIN, then the variable and its value are added to the most recent array of transaction. Otherwise they are added as a new key-value pair in localStorage indicating that it is a permanent/committed transaction.
 
--GET:
+GET:
  -	This grabs the values from the most recent transaction array or from localStorage if there are no transaction arrays open. NULL is printed out if no value exists.
 
--UNSET:
+UNSET:
  -	Checks the last transaction to set the variable to null or checks localStorage (if no open transaction) for the variable to do the same.
 
--COUNT:
+COUNT:
  -	If input[1] is present in the most recent transaction array, counter is incremented. If the counter is not 0, value is returned otherwise, NULL is printed out.
 
--END:
+END:
  -	When this command is entered, the divs that provide the space for entering commands are not displayed anymore.

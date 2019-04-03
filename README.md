@@ -4,16 +4,16 @@ Created two versions of a custom command line interface suing JavaScript/jQuery
 
 Version 1 [In-Memory Database] -
 SETUP:
-•	Used a web command line interface, link to the library - https://github.com/1j01/simple-console.
-•	Included files simple-console.css and simple-console.js and created an instance of the console, new SimpleConsole(options).
+-	Used a web command line interface, link to the library - https://github.com/1j01/simple-console.
+-	Included files simple-console.css and simple-console.js and created an instance of the console, new SimpleConsole(options).
 COMMANDS:
 A Web Storage object called localStorage was used for storing data within the browser.
 To perform any of the operations, the input was first converted into an array.
-•	SET: If the first element of the input, input[0] is SET, created a key-value pair in the localStorage with input[1] being the key and input[2] being the value.
-•	GET: Since localStorage stores data in string format, the obtained value from localStorage for the given variable (input[1]) was JSON parsed. If the value doesn’t exist, NULL is printed out.
-•	UNSET: Value of the corresponding key i.e, input[1] is set to null.
-•	COUNT: Looped through the entire localStorage object, if a key’s value is equal to input[1], then the counter was incremented and the corresponding count was returned.
-•	END: When this command is entered, the divs that provide the space for entering commands are not displayed anymore.
+-	SET: If the first element of the input, input[0] is SET, created a key-value pair in the localStorage with input[1] being the key and input[2] being the value.
+-	GET: Since localStorage stores data in string format, the obtained value from localStorage for the given variable (input[1]) was JSON parsed. If the value doesn’t exist, NULL is printed out.
+-	UNSET: Value of the corresponding key i.e, input[1] is set to null.
+-	COUNT: Looped through the entire localStorage object, if a key’s value is equal to input[1], then the counter was incremented and the corresponding count was returned.
+-	END: When this command is entered, the divs that provide the space for entering commands are not displayed anymore.
 
 Version 2 [In-Memory database with Transactions] -
 COMMANDS:

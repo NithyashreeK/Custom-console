@@ -5,7 +5,7 @@ Created two versions of a custom command line interface suing JavaScript/jQuery
 Version 1 [In-Memory Database] -\
 SETUP:
 -	Used a web command line interface, link to the library - https://github.com/1j01/simple-console.
--	Included files simple-console.css and simple-console.js and created an instance of the console, new SimpleConsole(options).
+-	Included files simple-console.css and simple-console.js and created an instance of the console, new SimpleConsole(options).\
 COMMANDS:
 A Web Storage object called localStorage was used for storing data within the browser.
 To perform any of the operations, the input was first converted into an array.
@@ -15,10 +15,10 @@ To perform any of the operations, the input was first converted into an array.
 -	COUNT: Looped through the entire localStorage object, if a key’s value is equal to input[1], then the counter was incremented and the corresponding count was returned.
 -	END: When this command is entered, the divs that provide the space for entering commands are not displayed anymore.
 
-Version 2 [In-Memory database with Transactions] -
-COMMANDS:
-BEGIN: 
-•	The function checks the number of BEGINS in localStorage indicating the number of transactional blocks. 
+Version 2 [In-Memory database with Transactions] -\
+COMMANDS:\
+-BEGIN: 
+ - The function checks the number of BEGINS in localStorage indicating the number of transactional blocks. 
 •	This is tracked by beginstatus and statusnumber. Beginstatus is incremented every time a BEGIN is entered, updating the statusnumber which is used throughout the code.
 •	An array key, in the format arr followed by statusnumber (ex. arr1) is created in localStorage every time a BEGIN is entered. Any transaction following this BEGIN will have their corresponding values stored in the array.
 •	If this command is entered for the first time, status key is created in localStorage and initialised to 1. Status indicates the number of BEGINs in localStoage.
